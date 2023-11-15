@@ -7,6 +7,12 @@ Curso Lenguajes de Programación - UCSP
 - Fredy Quispe
 - Joaquin Pino
 
+## Instalación y ejecución
+
+1. Descarga el código fuente
+2. Descarga Love2D y que este el comando "love" en el PATH
+3. En la carpeta principal del código fuente abre una terminal y ejecuta "love ."
+
 ## Controles
 
 - C: Saltar
