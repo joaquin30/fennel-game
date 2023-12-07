@@ -1,81 +1,64 @@
 ; librerias
-(local anim8 (require "lib.anim8"))
-(local sti (require "lib.sti"))
-(local bump (require "lib.bump"))
-(local sprite (require "utils.sprite"))
-(local background (require "utils.background"))
+(local anim8 (require :lib.anim8))
+(local sti (require :lib.sti))
+(local bump (require :lib.bump))
+(local sprite (require :utils.sprite))
+(local background (require :utils.background))
 
 ; objetos
-(local player (require "actor.player"))
-(local map (sti "map/Level 1.lua" ["bump"]))
+(local player (require :actor.player))
+(local map (sti "map/Level 1.lua" [:bump]))
 (local world (bump.newWorld))
-(local bg (background.load "Gray.png"))
+(local bg (background.load :Gray.png))
 
-; constantes
-(local velH 150)
-(local velY 400)
-(local gravity 1500)
+(fn init []
+  (map:bump_init world)
+  (world:add player player.x player.y player.w player.h))
+
+(fn keypressed [key]
+  (if
+    (= key "left")
+      (set player.mov.left true)
+    (= key "right")
+      (set player.mov.right true)
+    (= key "up")
+      (set player.mov.up true)
+    (= key "down")
+      (set player.mov.down true)
+    (= key "c")
+      (player:jump)
+    (= key "x")
+      (player:dash)))
+
+(fn keyreleased [key]
+  (if
+    (= key "left")
+      (set player.mov.left false)
+    (= key "right")
+      (set player.mov.right false)
+    (= key "up")
+      (set player.mov.up false)
+    (= key "down")
+      (set player.mov.down false)
+    (= key "c")
+      (player:stopJump)))
+
+(fn update [dt]
+  (bg:update dt)
+  (player:update world dt))
+  ;(print player.x player.y))
+
+(fn draw []
+  (bg:draw)
+  (map:draw)
+  ;(map:bump_draw) ; para ver colisiones
+  (player:draw))
 
 {
-    :name "level"
-
-    :init (fn []
-        (map:bump_init world)
-        (world:add player player.x player.y player.w player.h))
-
-    :update (fn [dt]
-        ; Fondo
-        (bg:update dt)
-
-        ; Input manager
-        (let [left  (love.keyboard.isDown "left")
-              right (love.keyboard.isDown "right")]
-            (set player.vx
-                (if (and left (not right)) (- velH)
-                    (and right (not left)) velH 0)))
-        
-        ; update player
-        (let [goal-x (+ player.x (* player.vx dt))
-              goal-y (+ player.y (* player.vy dt))
-              (actual-x actual-y) (world:move player goal-x goal-y)
-              (_ len) (world:queryRect actual-x (+ actual-y player.h) player.w 1)] ; chequear si estamos en el piso
-            (when (and (> len 0) (>= player.vy 0))
-                (set player.onfloor true)
-                (set player.vy 0))
-            (when (= len 0)
-                (set player.onfloor false))
-            (when (< goal-y actual-y)
-                (set player.vy 0))
-            (set player.x actual-x)
-            (set player.y actual-y)
-            (when (not player.onfloor)
-                (set player.vy
-                    (math.min velY (+ player.vy (* gravity dt))))))
-
-        ; update animations
-        (when (< player.vx 0)
-            (sprite.flipH player true))
-        (when (> player.vx 0)
-            (sprite.flipH player false))
-        (when player.onfloor
-            (set player.anim (if (> (math.abs player.vx) 0) "run" "idle")))
-        (when (not player.onfloor)
-            (set player.anim (if (>= player.vy 0) "jump" "fall")))
-        (sprite.update player dt))
-
-    :keypressed (fn [key]
-        (when (and (= key "c") player.onfloor)
-            (set player.onfloor false)
-            (set player.vy (- velY))))
-
-    :keyreleased (fn [key])
-
-    :draw (fn []
-        (bg:draw)
-        (map:draw)
-        ; (map:bump_draw) ; para ver colisiones
-        (sprite.draw player))
-        ;(love.graphics.print (tostring player.onfloor) 0 0)
-        ;(love.graphics.print (tostring player.x) 0 10)
-        ;(love.graphics.print (tostring player.y) 0 20))
+  :name "level"
+  : init
+  : keypressed
+  : keyreleased
+  : update
+  : draw
 }
