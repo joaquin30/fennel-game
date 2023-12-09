@@ -4,7 +4,7 @@
 {:load (fn [name]
          {:image (love.graphics.newImage (.. :assets/Background/ name))
           :y -64
-          :vel 24
+          :vel 40
           :update (fn [self dt]
                     (set self.y (+ self.y (* self.vel dt)))
                     (when (>= self.y 0)

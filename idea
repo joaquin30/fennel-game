@@ -1,0 +1,8 @@
+{
+   'map': 2D array of ints
+   'falling_platforms' array of pairs
+   'trampolines': array of pairs
+   'spikes': array of pairs
+   'player': pair
+   'end': two pairs for rect: topleft bottomright
+}

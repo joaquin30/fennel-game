@@ -15,16 +15,16 @@ Curso Lenguajes de Programación - UCSP
 
 ## Controles
 
+- X: Dash horizontal
 - C: Saltar
-- Flecha izq.: Izquierda
-- Flecha der.: Derecha
+- Flecha izq.: Caminar a la izquierda
+- Flecha der.: Caminar a la derecha
 
 ## Librerias y herramientas usadas
 
 - Love2D
 - bump.lua
 - anim8
-- sti
 - push
-- Tiled Map Editor
 - Fennel
+- Tiled Map Editor

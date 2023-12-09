@@ -23,24 +23,24 @@
 
 ; constantes
 (local VELX 150)
-(local VELY 500)
+(local VELY 400)
 (local GRAVITY 1500)
 
 (fn stopJump [player]
   (set player.vy
-    (if (< player.vy 0) (/ player.vy 2) player.vy)))
+    (if (< player.vy 0) (/ player.vy 5) player.vy)))
 
 (fn jump [player]
   (when (and (= player.hascontrol 0) (<= player.airtime 20)
              (not player.hasjumped))
     (set player.hasjumped true)
     (set player.vy (- VELY)))
-  (when (and player.onwall player.hascontrol)
+  (when (and (<= player.offwall 20) player.hascontrol)
     (set player.hascontrol 20)
     (set player.hasjumped true)
     (set player.vy (- VELY))
     (set player.vx (* VELX
-      (if player.flippedH 2 -2)))))
+      (if player.walldir -2 2)))))
 
 (fn dash [player]
   (when (and (= player.hascontrol 0) (not player.hasdashed))
@@ -82,15 +82,20 @@
   (set player.hascontrol (- player.hascontrol
     (if (> player.hascontrol 0) 1 0)))
 
-  (set player.onwall
-    (and (not player.colls.down)
-         (or player.colls.left player.colls.right)))
+  (set player.offwall
+    (if (and (not player.colls.down)
+         (or player.colls.left player.colls.right))
+      0 (+ player.offwall 1)))
+  (when (and (not player.colls.down) player.colls.left)
+    (set player.walldir true))
+  (when (and (not player.colls.down) player.colls.right)
+    (set player.walldir false))
 
   (set player.vy
     (math.min
-      (if player.onwall 100 300)
+      (if (= player.offwall 0) 100 300)
       (+ player.vy (* dt
-        (if (< (math.abs player.vy) 30) (/ GRAVITY 2) GRAVITY )))))
+        (if (< (math.abs player.vy) 50) (/ GRAVITY 2) GRAVITY )))))
 
   ; update animations
   (when (< player.vx 0)
@@ -101,7 +106,7 @@
     (set player.anim (if (or player.mov.left player.mov.right) "run" "idle")))
   (when (> player.airtime 0)
     (set player.anim (if (>= player.vy 0) "jump" "fall")))
-  (when (and player.onwall
+  (when (and (= player.offwall 0)
              (> player.vy 0))
     (set player.anim "wall") )
 
@@ -111,7 +116,7 @@
   : images
   : animations
   :anim "idle"
-  :flippedH false
+  :flippedH false ; false: right, true: left
   :mov {:up false :down false :left false :right false}
   :w 18 :h 26
   :x 50 :y 50
@@ -120,8 +125,10 @@
   :airtime 0
   :hasjumped false
   :hasdashed false
-  :onwall false
+  :offwall 0
+  :walldir false ; false: right, true: left
   :hascontrol 0
+  :alive true
 
 ;; Functions
   : jump

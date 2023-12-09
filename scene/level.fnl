@@ -1,18 +1,18 @@
 ; librerias
 (local anim8 (require :lib.anim8))
-(local sti (require :lib.sti))
 (local bump (require :lib.bump))
 (local sprite (require :utils.sprite))
 (local background (require :utils.background))
+(local loadTilemap (require "map.tilemap"))
 
 ; objetos
 (local player (require :actor.player))
-(local map (sti "map/Level 1.lua" [:bump]))
+;(local map (sti "map/Level 2.lua" [:bump]))
 (local world (bump.newWorld))
-(local bg (background.load :Gray.png))
+(local bg (background.load "Celeste2.png"))
+(local tilemap (loadTilemap "map.level.1" world))
 
 (fn init []
-  (map:bump_init world)
   (world:add player player.x player.y player.w player.h))
 
 (fn keypressed [key]
@@ -50,8 +50,9 @@
 
 (fn draw []
   (bg:draw)
-  (map:draw)
-  ;(map:bump_draw) ; para ver colisiones
+  ;(love.graphics.setBlendMode "alpha" "premultiplied")
+  (love.graphics.draw tilemap)
+  ;(love.graphics.setBlendMode "alpha" "alphamultiply")
   (player:draw))
 
 {
