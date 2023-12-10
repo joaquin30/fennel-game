@@ -1,11 +1,12 @@
 ;; Libraries
-(local fennel (require :lib.fennel))
-(local repl (require :lib.stdio))
-(local push (require :lib.push))
-(local scene-manager (require :utils.scene))
+(local fennel (require "lib.fennel"))
+(local repl (require "lib.stdio"))
+(local push (require "lib.push"))
+(local sceneManager (require "utils.scene"))
 
 ;; Scene manager
-(var scene (scene-manager.load :level))
+(local levels [])
+(var scene (sceneManager.load "menu"))
 
 ;; Constantes
 (local STEP (/ 1 120)) ; 120 FPS para fisicas
@@ -27,7 +28,9 @@
 (fn love.update [dt]
   (set accum (+ accum dt))
   (while (>= accum STEP)
-    (scene.update STEP)
+    (let [newscene (scene.update STEP)]
+      (when newscene
+        (set scene (sceneManager.load newscene))))
     (set accum (- accum STEP))))
 
 (fn love.keypressed [key]

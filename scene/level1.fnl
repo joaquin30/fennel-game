@@ -1,18 +1,25 @@
 ; librerias
-(local anim8 (require :lib.anim8))
-(local bump (require :lib.bump))
-(local sprite (require :utils.sprite))
-(local background (require :utils.background))
+(local anim8 (require "lib.anim8"))
+(local bump (require "lib.bump"))
+(local sprite (require "utils.sprite"))
+(local background (require "utils.background"))
 (local loadTilemap (require "map.tilemap"))
+(local newPlayer (require "actor.player"))
 
 ; objetos
-(local player (require :actor.player))
-;(local map (sti "map/Level 2.lua" [:bump]))
-(local world (bump.newWorld))
-(local bg (background.load "Celeste2.png"))
-(local tilemap (loadTilemap "map.level.1" world))
+(var player nil)
+(var bg nil)
+(var world nil)
+(var tilemap nil)
 
 (fn init []
+  (set player (newPlayer 20 300))
+  (sprite.flipH player false)
+  (sprite.flipH player true)
+  (sprite.flipH player false)
+  (set bg (background.load "Celeste2.png"))
+  (set world (bump.newWorld))
+  (set tilemap (loadTilemap "map.level.1" world))
   (world:add player player.x player.y player.w player.h))
 
 (fn keypressed [key]
@@ -45,14 +52,12 @@
 
 (fn update [dt]
   (bg:update dt)
-  (player:update world dt))
-  ;(print player.x player.y))
+  (player:update world dt)
+  (if player.dead "level1" (< player.y -10) "exit" nil))
 
 (fn draw []
   (bg:draw)
-  ;(love.graphics.setBlendMode "alpha" "premultiplied")
   (love.graphics.draw tilemap)
-  ;(love.graphics.setBlendMode "alpha" "alphamultiply")
   (player:draw))
 
 {

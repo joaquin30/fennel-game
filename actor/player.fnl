@@ -49,6 +49,11 @@
     (set player.vx (* VELX
       (if player.flippedH -5 5)))))
 
+(fn collFilter [player object]
+  (when (= object.type "spike")
+      (set player.dead true))
+  "slide")
+
 (fn update [player world dt]
   (when (= player.hascontrol 0)
     (set player.vx (if player.mov.right VELX player.mov.left (- VELX) 0)))
@@ -57,7 +62,7 @@
 
   (let [goalx (+ player.x (* player.vx dt))
         goaly (+ player.y (* player.vy dt))
-        (actualx actualy) (world:move player goalx goaly)]
+        (actualx actualy) (world:move player goalx goaly collFilter)]
     (when (< goalx actualx)
       (set player.colls.right true))
     (when (> goalx actualx)
@@ -112,28 +117,29 @@
 
   (sprite.update player dt))
 
-{
-  : images
-  : animations
-  :anim "idle"
-  :flippedH false ; false: right, true: left
-  :mov {:up false :down false :left false :right false}
-  :w 18 :h 26
-  :x 50 :y 50
-  :vx 0 :vy 0
-  :colls {:up false :down false :left false :right false}
-  :airtime 0
-  :hasjumped false
-  :hasdashed false
-  :offwall 0
-  :walldir false ; false: right, true: left
-  :hascontrol 0
-  :alive true
+(fn newPlayer [x y]
+  {
+    : images
+    : animations
+    :anim "idle"
+    :flippedH false ; false: right, true: left
+    :mov {:up false :down false :left false :right false}
+    :w 18 :h 26
+    : x : y
+    :vx 0 :vy 0
+    :colls {:up false :down false :left false :right false}
+    :airtime 0
+    :hasjumped false
+    :hasdashed false
+    :offwall 0
+    :walldir false ; false: right, true: left
+    :hascontrol 0
+    :dead false
 
-;; Functions
-  : jump
-  : dash
-  : stopJump
-  : update
-  : draw
-}
+  ;; Functions
+    : jump
+    : dash
+    : stopJump
+    : update
+    : draw
+  })
