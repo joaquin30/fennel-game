@@ -24,8 +24,8 @@
 ; constantes
 (local VELX 150)
 (local VELY 400)
-(local GRAVITY 2000)
-(local DASH_VEL 700)
+(local GRAVITY 1700)
+(local DASH_VEL 600)
 
 (fn stopJump [player]
   (set player.vy
@@ -36,25 +36,25 @@
              (not player.hasjumped))
     (set player.hasjumped true)
     (set player.vy (- VELY)))
-  (when (and (<= player.offwall 20) player.hascontrol)
-    (set player.hascontrol 20)
+  (when (and (<= player.offwall 10) player.hascontrol)
+    (set player.hascontrol 25)
     (set player.hasjumped true)
-    (set player.vy (- VELY))
+    (set player.vy (* VELY -1))
     (set player.vx (* VELX
       (if player.walldir -1.5 1.5)))))
 
 (fn dash [player]
   (when (and (= player.hascontrol 0) (= player.hasdashed 0) player.candash)
     (set player.candash false)
-    (set player.hasdashed 12)
-    (set player.hascontrol 12)
+    (set player.hasdashed 10)
+    (set player.hascontrol 10)
     (set player.vx (if player.mov.right DASH_VEL player.mov.left (- DASH_VEL)  0))
     (set player.vy (if player.mov.up (- DASH_VEL) player.mov.down DASH_VEL 0))
     (when (and (= player.vx 0) (= player.vy 0)) ; cuando no haya velocidad
       (set player.vx (if player.flippedH (- DASH_VEL) DASH_VEL)))
     (when (and (~= player.vx 0) (~= player.vy 0)) ; triangulo de 45
-      (set player.vx (* player.vx 0.8)) ; 0.8 ~ 1/sqrt(2) + algo
-      (set player.vy (* player.vy 0.8)))))
+      (set player.vx (* player.vx 0.7)) ; 0.7 ~ 1/sqrt(2)
+      (set player.vy (* player.vy 0.7)))))
 
 (fn collFilter [player object]
   (when (= object.type "spike")
@@ -64,8 +64,8 @@
 (fn update [player world dt]
   (when (= player.hascontrol 0)
     (set player.vx (if player.mov.right VELX player.mov.left (- VELX) 0)))
-  (when (= player.hasdashed 1)
-    (set player.vy 0))
+  (when (and (= player.hasdashed 1))
+    (set player.vy (if (< player.vy 0) (* VELY -0.25) 0)))
 
   (set player.colls {:up false :down false :left false :right false})
 
@@ -91,7 +91,7 @@
     (set player.candash true))
 
   (when (and player.colls.up (= player.hasdashed 0))
-    (set player.vy 200))
+    (set player.vy 0))
 
   (set player.hascontrol (- player.hascontrol
     (if (> player.hascontrol 0) 1 0)))
