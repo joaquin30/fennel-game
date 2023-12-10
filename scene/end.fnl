@@ -17,7 +17,8 @@
 
 (fn draw []
   (bg:draw)
-  (love.graphics.print "PRESIONA X PARA EL MENU" (- (/ WIDTH 2) 96) (- (/ HEIGHT 2) 16)))
+  (love.graphics.print "FIN" (- (/ WIDTH 2) 16) (- (/ HEIGHT 2) 16))
+  (love.graphics.print "PRESIONA X PARA EL MENU" (- (/ WIDTH 2) 96) (/ HEIGHT 2)))
 
 {
   :name "level"

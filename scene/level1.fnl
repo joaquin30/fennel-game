@@ -6,6 +6,11 @@
 (local loadTilemap (require "map.tilemap"))
 (local newPlayer (require "actor.player"))
 
+; constantes
+(local CURRENT_LEVEL "level1")
+(local NEXT_LEVEL "end")
+(local TILEMAP "map.level.1")
+
 ; objetos
 (var player nil)
 (var bg nil)
@@ -19,7 +24,7 @@
   (sprite.flipH player false)
   (set bg (background.load "Celeste2.png"))
   (set world (bump.newWorld))
-  (set tilemap (loadTilemap "map.level.1" world))
+  (set tilemap (loadTilemap TILEMAP world))
   (world:add player player.x player.y player.w player.h))
 
 (fn keypressed [key]
@@ -53,7 +58,7 @@
 (fn update [dt]
   (bg:update dt)
   (player:update world dt)
-  (if player.dead "level1" (< player.y -10) "exit" nil))
+  (if player.dead CURRENT_LEVEL (< player.y -10) NEXT_LEVEL nil))
 
 (fn draw []
   (bg:draw)
