@@ -10,12 +10,9 @@
 
 (fn update [dt]
   (bg:update dt)
-  (if
-    (love.keyboard.isDown "escape")
-      (love.event.quit)
-    (and (love.keyboard.isDown "c") (love.keyboard.isDown "x"))
-      "level1"
-      nil))
+  (if (and (love.keyboard.isDown "c") (love.keyboard.isDown "x"))
+    "level1"
+    nil))
 
 (fn draw []
   (bg:draw)

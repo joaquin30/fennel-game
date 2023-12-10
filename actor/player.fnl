@@ -24,7 +24,8 @@
 ; constantes
 (local VELX 150)
 (local VELY 400)
-(local GRAVITY 1500)
+(local GRAVITY 2000)
+(local DASH_VEL 700)
 
 (fn stopJump [player]
   (set player.vy
@@ -40,14 +41,20 @@
     (set player.hasjumped true)
     (set player.vy (- VELY))
     (set player.vx (* VELX
-      (if player.walldir -2 2)))))
+      (if player.walldir -1.5 1.5)))))
 
 (fn dash [player]
-  (when (and (= player.hascontrol 0) (not player.hasdashed))
-    (set player.hasdashed true)
-    (set player.hascontrol 10)
-    (set player.vx (* VELX
-      (if player.flippedH -5 5)))))
+  (when (and (= player.hascontrol 0) (= player.hasdashed 0) player.candash)
+    (set player.candash false)
+    (set player.hasdashed 12)
+    (set player.hascontrol 12)
+    (set player.vx (if player.mov.right DASH_VEL player.mov.left (- DASH_VEL)  0))
+    (set player.vy (if player.mov.up (- DASH_VEL) player.mov.down DASH_VEL 0))
+    (when (and (= player.vx 0) (= player.vy 0)) ; cuando no haya velocidad
+      (set player.vx (if player.flippedH (- DASH_VEL) DASH_VEL)))
+    (when (and (~= player.vx 0) (~= player.vy 0)) ; triangulo de 45
+      (set player.vx (* player.vx 0.8)) ; 0.8 ~ 1/sqrt(2) + algo
+      (set player.vy (* player.vy 0.8)))))
 
 (fn collFilter [player object]
   (when (= object.type "spike")
@@ -57,6 +64,8 @@
 (fn update [player world dt]
   (when (= player.hascontrol 0)
     (set player.vx (if player.mov.right VELX player.mov.left (- VELX) 0)))
+  (when (= player.hasdashed 1)
+    (set player.vy 0))
 
   (set player.colls {:up false :down false :left false :right false})
 
@@ -79,13 +88,15 @@
     (set player.airtime 0)
     (set player.vy 0)
     (set player.hasjumped false)
-    (set player.hasdashed false))
+    (set player.candash true))
 
-  (when player.colls.up
-    (set player.vy 0))
+  (when (and player.colls.up (= player.hasdashed 0))
+    (set player.vy 200))
 
   (set player.hascontrol (- player.hascontrol
     (if (> player.hascontrol 0) 1 0)))
+  (set player.hasdashed (- player.hasdashed
+    (if (> player.hasdashed 0) 1 0)))
 
   (set player.offwall
     (if (and (not player.colls.down)
@@ -96,11 +107,12 @@
   (when (and (not player.colls.down) player.colls.right)
     (set player.walldir false))
 
-  (set player.vy
-    (math.min
-      (if (= player.offwall 0) 100 300)
-      (+ player.vy (* dt
-        (if (< (math.abs player.vy) 50) (/ GRAVITY 2) GRAVITY )))))
+  (when (= player.hasdashed 0)
+    (set player.vy
+      (math.min
+        (if (= player.offwall 0) 100 300)
+        (+ player.vy (* dt
+          (if (< (math.abs player.vy) 50) (/ GRAVITY 2) GRAVITY ))))))
 
   ; update animations
   (when (< player.vx 0)
@@ -130,7 +142,8 @@
     :colls {:up false :down false :left false :right false}
     :airtime 0
     :hasjumped false
-    :hasdashed false
+    :candash false
+    :hasdashed 0
     :offwall 0
     :walldir false ; false: right, true: left
     :hascontrol 0
