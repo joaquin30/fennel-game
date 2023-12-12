@@ -22,7 +22,9 @@
               quad (love.graphics.newQuad qx qy TILEWIDTH TILEHEIGHT img)]
         (batch:add quad px py)
         (world:add {:type (if (= v SPIKE_ID) "spike" "terrain")}
-          px (if (= v SPIKE_ID) (+ py 12) py)
-          TILEWIDTH (if (= v SPIKE_ID) 4 TILEHEIGHT)))))
+          (if (= v SPIKE_ID) (+ px 4) px)
+          (if (= v SPIKE_ID) (+ py 12) py)
+          (if (= v SPIKE_ID) 8 TILEWIDTH)
+          (if (= v SPIKE_ID) 4 TILEHEIGHT)))))
     (batch:flush)
     batch))

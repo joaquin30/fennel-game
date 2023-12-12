@@ -23,7 +23,7 @@
 
 ; constantes
 (local VELX 150)
-(local VELY 400)
+(local VELY 450)
 (local GRAVITY 1700)
 (local DASH_VEL 600)
 
@@ -41,7 +41,7 @@
     (set player.hasjumped true)
     (set player.vy (* VELY -1))
     (set player.vx (* VELX
-      (if player.walldir -1.5 1.5)))))
+      (if player.walldir -1.75 1.75)))))
 
 (fn dash [player]
   (when (and (= player.hascontrol 0) (= player.hasdashed 0) player.candash)
@@ -57,9 +57,7 @@
       (set player.vy (* player.vy 0.7)))))
 
 (fn collFilter [player object]
-  (when (= object.type "spike")
-      (set player.dead true))
-  "slide")
+  (if (= object.type "spike") nil "slide"))
 
 (fn update [player world dt]
   (when (= player.hascontrol 0)
@@ -82,6 +80,11 @@
       (set player.colls.down true))
     (set player.x actualx)
     (set player.y actualy))
+
+  (let [(items _) (world:queryRect player.x player.y player.w player.h)]
+    (each [_ item (ipairs items)]
+      (when (= item.type "spike")
+        (set player.dead true))))
 
   (set player.airtime (+ player.airtime 1))
   (when player.colls.down

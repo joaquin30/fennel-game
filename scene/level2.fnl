@@ -8,9 +8,9 @@
 (local bumpDraw (require "utils.bump_draw"))
 
 ; constantes
-(local CURRENT_LEVEL "level1")
-(local NEXT_LEVEL "level2")
-(local TILEMAP "map.level.1")
+(local CURRENT_LEVEL "level2")
+(local NEXT_LEVEL "end")
+(local TILEMAP "map.level.2")
 
 ; objetos
 (var player nil)
@@ -19,7 +19,7 @@
 (var tilemap nil)
 
 (fn init []
-  (set player (newPlayer 20 300))
+  (set player (newPlayer 20 20))
   (sprite.flipH player false)
   (sprite.flipH player true)
   (sprite.flipH player false)
