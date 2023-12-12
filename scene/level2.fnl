@@ -9,7 +9,7 @@
 
 ; constantes
 (local CURRENT_LEVEL "level2")
-(local NEXT_LEVEL "end")
+(local NEXT_LEVEL "level3")
 (local TILEMAP "map.level.2")
 
 ; objetos
@@ -19,7 +19,7 @@
 (var tilemap nil)
 
 (fn init []
-  (set player (newPlayer 20 20))
+  (set player (newPlayer 20 300 "Mask Dude"))
   (sprite.flipH player false)
   (sprite.flipH player true)
   (sprite.flipH player false)
@@ -64,8 +64,8 @@
 (fn draw []
   (bg:draw)
   (love.graphics.draw tilemap)
-  (player:draw)
-  (bumpDraw world))
+  (player:draw))
+  ;(bumpDraw world))
 
 {
   :name "level"

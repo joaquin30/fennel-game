@@ -50,6 +50,7 @@
    <wangcolor name="Verde" color="#ff0000" tile="7" probability="1"/>
    <wangcolor name="Naranja" color="#00ff00" tile="95" probability="1"/>
    <wangcolor name="Rosado" color="#0000ff" tile="183" probability="1"/>
+   <wangcolor name="Ladrillo" color="#ff7700" tile="107" probability="1"/>
    <wangtile tileid="6" wangid="0,0,0,1,0,0,0,0"/>
    <wangtile tileid="7" wangid="0,0,0,1,0,1,0,0"/>
    <wangtile tileid="8" wangid="0,0,0,0,0,1,0,0"/>
@@ -68,14 +69,27 @@
    <wangtile tileid="96" wangid="0,0,0,0,0,2,0,0"/>
    <wangtile tileid="97" wangid="0,2,0,0,0,2,0,2"/>
    <wangtile tileid="98" wangid="0,2,0,2,0,0,0,2"/>
+   <wangtile tileid="105" wangid="0,0,0,4,0,0,0,0"/>
+   <wangtile tileid="106" wangid="0,0,0,4,0,4,0,0"/>
+   <wangtile tileid="107" wangid="0,0,0,0,0,4,0,0"/>
+   <wangtile tileid="108" wangid="0,4,0,0,0,4,0,4"/>
+   <wangtile tileid="109" wangid="0,4,0,4,0,0,0,4"/>
    <wangtile tileid="116" wangid="0,2,0,2,0,0,0,0"/>
    <wangtile tileid="117" wangid="0,2,0,2,0,2,0,2"/>
    <wangtile tileid="118" wangid="0,0,0,0,0,2,0,2"/>
    <wangtile tileid="119" wangid="0,0,0,2,0,2,0,2"/>
    <wangtile tileid="120" wangid="0,2,0,2,0,2,0,0"/>
+   <wangtile tileid="127" wangid="0,4,0,4,0,0,0,0"/>
+   <wangtile tileid="128" wangid="0,4,0,4,0,4,0,4"/>
+   <wangtile tileid="129" wangid="0,0,0,0,0,4,0,4"/>
+   <wangtile tileid="130" wangid="0,0,0,4,0,4,0,4"/>
+   <wangtile tileid="131" wangid="0,4,0,4,0,4,0,0"/>
    <wangtile tileid="138" wangid="0,2,0,0,0,0,0,0"/>
    <wangtile tileid="139" wangid="0,2,0,0,0,0,0,2"/>
    <wangtile tileid="140" wangid="0,0,0,0,0,0,0,2"/>
+   <wangtile tileid="149" wangid="0,4,0,0,0,0,0,0"/>
+   <wangtile tileid="150" wangid="0,4,0,0,0,0,0,4"/>
+   <wangtile tileid="151" wangid="0,0,0,0,0,0,0,4"/>
    <wangtile tileid="182" wangid="0,0,0,3,0,0,0,0"/>
    <wangtile tileid="183" wangid="0,0,0,3,0,3,0,0"/>
    <wangtile tileid="184" wangid="0,0,0,0,0,3,0,0"/>

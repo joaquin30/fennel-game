@@ -19,7 +19,7 @@
 (var tilemap nil)
 
 (fn init []
-  (set player (newPlayer 20 300))
+  (set player (newPlayer 20 300 "Ninja Frog"))
   (sprite.flipH player false)
   (sprite.flipH player true)
   (sprite.flipH player false)
@@ -64,8 +64,8 @@
 (fn draw []
   (bg:draw)
   (love.graphics.draw tilemap)
-  (player:draw)
-  (bumpDraw world))
+  (player:draw))
+  ;(bumpDraw world))
 
 {
   :name "level"
